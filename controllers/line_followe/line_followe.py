@@ -140,7 +140,7 @@ for k in range(0,t.shape[1]):
         v_r=np.array([[u_r[0,k+1]],[ww_r[0,k+1]]])
 
         ## Velocidad del punto modelado
-        hp=Jacobiano(v_r,phi[0,k],a)
+        hp=Jacobiano(v_r,phi_r[0,k],a)
     
         ## Obtener las velocidades en Cada eje
         xp=hp[0,0]
@@ -148,7 +148,7 @@ for k in range(0,t.shape[1]):
 
         x_r[0,k+1]=euler(x_r[0,k],xp,t_sample)
         y_r[0,k+1]=euler(y_r[0,k],yp,t_sample)
-        phi_r[0,k+1]=euler(phi[0,k],ww_r[0,k+1],t_sample)
+        phi_r[0,k+1]=euler(phi_r[0,k],ww_r[0,k+1],t_sample)
 
         posicion = gps.getValues()
 

@@ -97,7 +97,6 @@ def grafica_c(sty,titulo,x,y,etiqueta,ejex,ejey,color,x_1,y_1,etiqueta_1,color_1
 def obstaculos(distance,ground,err_1,err_2,w_1,kp,ki,kd,t_sample):
     linea_real=conversion_sensor(ground[0].getValue(),ground[1].getValue(),ground[2].getValue())
     pepito,err=pid(0,linea_real,err_1,err_2,w_1,kp,ki,kd,t_sample)
-    print(linea_real)
     if distance[1].getValue() > 100.0:
         w=1
         u=0.01
@@ -118,7 +117,6 @@ def obstaculos(distance,ground,err_1,err_2,w_1,kp,ki,kd,t_sample):
         #w,err=pid(0,linea_real,err_1,err_2,w_1,kp,ki,kd,t_sample)
         w=0
         u=0.02
-    print(linea_real)
     return u,w,err
 
 def Jacobiano(v,phi,a):
