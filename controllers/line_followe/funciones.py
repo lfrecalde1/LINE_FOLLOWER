@@ -128,12 +128,22 @@ def euler(z,zp,t_sample):
     z=z+zp*t_sample
     return z
 
-def vel(ruedas,lastPostL,lastPostR,t_sample):
+def vel(ruedas,lastPostL,lastPostR,t_sample,k):
     newPostR = ruedas[0].getValue()
-    velPosR = (newPostR - lastPostR)/t_sample
-    lastPostR = newPostR
-
     newPostL = ruedas[1].getValue()
-    velPosL = (newPostL - lastPostL)/t_sample
+    if(k==0):
+        
+        velPosR = 0
+        
+        
+        velPosL = 0
+       
+    else:
+        
+        velPosR = (newPostR - lastPostR)/t_sample
+        velPosL = (newPostL - lastPostL)/t_sample
+        
+    lastPostR = newPostR
     lastPostL = newPostL
+
     return velPosR,velPosL,lastPostL,lastPostR

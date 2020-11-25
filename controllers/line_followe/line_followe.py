@@ -6,7 +6,7 @@ import matplotlib as mpl
 from controller import *
 from funciones import *
 robot = Robot()
-
+robot.__init__
 # get the time step of the current world.
 timestep = int(95)# 100 milisegundos equivale a 0.1 segundos
 
@@ -45,9 +45,26 @@ gps.enable(timestep)
 imu = InertialUnit("inertial unit")
 imu.enable(timestep)
 
+# Seccion para visualizar la camara
+camera_id=[] 
+camara=['camera']
+for i in range(1):
+    camera_id.append(robot.getCamera(camara[i]))
+    camera_id[i].enable(timestep)
+
+
+lidar_id=[]    
+lidar=['lidar']
+for i in range(1):
+    lidar_id.append(robot.getLidar(lidar[i]))
+    lidar_id[i].enablePointCloud()
+    lidar_id[i].enable(timestep)
+ 
+
+#display = robot.getDisplay('displayA')
 # Definir el tiempo de sampleo del sistema
 t_sample=0.1
-t_final=35+t_sample
+t_final=10+t_sample
 t=np.arange(0,t_final,t_sample)
 t=t.reshape(1,t.shape[0])
 
@@ -130,17 +147,18 @@ for k in range(0,t.shape[1]):
 
        
         #Transformacion para los valores reales del gps
-        w_r_r[0,k+1],w_l_r[0,k+1],lastPostL,lastPostR=vel(ruedas,lastPostL,lastPostR,t_sample)
+        w_r_r[0,k+1],w_l_r[0,k+1],lastPostL,lastPostR=vel(ruedas,lastPostL,lastPostR,t_sample,k)
         #w_r_r[0,k+1]=wheels[0].getVelocity()
         #w_l_r[0,k+1]=wheels[1].getVelocity()
 
         W=np.array([[w_r_r[0,k+1]],[w_l_r[0,k+1]]])
+
         u_r[0,k+1],ww_r[0,k+1]=conversion_1(W,r,L) 
 
         v_r=np.array([[u_r[0,k+1]],[ww_r[0,k+1]]])
 
         ## Velocidad del punto modelado
-        hp=Jacobiano(v_r,phi_r[0,k],a)
+        hp=Jacobiano(v_r,phi[0,k],a)
     
         ## Obtener las velocidades en Cada eje
         xp=hp[0,0]
@@ -148,7 +166,7 @@ for k in range(0,t.shape[1]):
 
         x_r[0,k+1]=euler(x_r[0,k],xp,t_sample)
         y_r[0,k+1]=euler(y_r[0,k],yp,t_sample)
-        phi_r[0,k+1]=euler(phi_r[0,k],ww_r[0,k+1],t_sample)
+        phi_r[0,k+1]=euler(phi[0,k],ww_r[0,k+1],t_sample)
 
         posicion = gps.getValues()
 
@@ -162,6 +180,9 @@ for k in range(0,t.shape[1]):
         err_2=err_1
         err_1=err
         w_1=w[0,k]
+        
+     
+        
            
     
 wheels[0].setVelocity(0)
