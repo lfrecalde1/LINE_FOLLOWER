@@ -44,8 +44,11 @@ gps.enable(timestep)
 # DFINCION DE LA IMU
 imu = InertialUnit("inertial unit")
 imu.enable(timestep)
-
 # Seccion para visualizar la camara
+pantalla=Display("display")
+pantalla.setColor(0xFFFFFF)
+pantalla.drawLine(0, 50, 100, 50)
+pantalla.drawLine(50, 0, 50, 100)
 camera_id=[] 
 camara=['camera']
 for i in range(1):
@@ -64,7 +67,7 @@ for i in range(1):
 #display = robot.getDisplay('displayA')
 # Definir el tiempo de sampleo del sistema
 t_sample=0.1
-t_final=10+t_sample
+t_final=20+t_sample
 t=np.arange(0,t_final,t_sample)
 t=t.reshape(1,t.shape[0])
 
@@ -167,7 +170,10 @@ for k in range(0,t.shape[1]):
         x_r[0,k+1]=euler(x_r[0,k],xp,t_sample)
         y_r[0,k+1]=euler(y_r[0,k],yp,t_sample)
         phi_r[0,k+1]=euler(phi[0,k],ww_r[0,k+1],t_sample)
-
+        
+        pixel_u,pixel_v=tranformacion_pantalla(x_r[0,k+1]*100,y_r[0,k+1]*100,1)
+        print(pixel_v,pixel_u)
+        pantalla.drawPixel(int(pixel_v),int(pixel_u))
         posicion = gps.getValues()
 
         x_real,y_real,z_real=tranformacion_cordenadas(posicion[0],posicion[1],posicion[2],-np.pi/2,-np.pi/2)
@@ -181,10 +187,6 @@ for k in range(0,t.shape[1]):
         err_1=err
         w_1=w[0,k]
         
-     
-        
-           
-    
 wheels[0].setVelocity(0)
 wheels[1].setVelocity(0)
 grafica_c('default','Trayectorias',x[0,:],y[0,:],'$h$','$x[m]$','$y[m]$','g',x_r[0,:],y_r[0,:],'$h_r$','r--')

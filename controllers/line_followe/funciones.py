@@ -147,3 +147,9 @@ def vel(ruedas,lastPostL,lastPostR,t_sample,k):
     lastPostL = newPostL
 
     return velPosR,velPosL,lastPostL,lastPostR
+    
+def tranformacion_pantalla(x,y,z):
+    T=np.matrix([[0,-1,0,50],[1,0,0,50],[0,0,1,0],[0,0,0,1]])
+    posicion=np.array([[x],[y],[z],[1]])
+    camara=T@posicion
+    return camara[0,0],camara[1,0]
